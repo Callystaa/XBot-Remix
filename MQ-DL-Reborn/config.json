@@ -1,0 +1,10 @@
+{
+    "email": "jmante9087@yousmail.com",
+    "password": "!Userbot1",
+    "output_dir": " ../Music/",
+    "quality": 4,
+    "cover_size": 5,
+    "fname_template": "{track_padded}. {title}",
+    "keep_cover": true,
+    "meta_language": "en-US" 
+}
