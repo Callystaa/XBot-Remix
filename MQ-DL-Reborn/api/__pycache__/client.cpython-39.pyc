@@ -1,0 +1,76 @@
+client.cpython-39.pyc
+$ cat client.cpython-39.pyc
+a
+�[`��@sddlZGdd�d�ZdS)�Nc@sfeZdZdd�Zddd�Zd�Zd    d
+�Zd
+   d
+d�dd�Zd dd�Z
+dd�Z
+    dd�Z
+dS)�ClientcCs2t��|_|jj�ddd��ddg|_d|_dS)NzsMozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36zhttp://localhost:19330/)z
+User-Agent�Refererzhttps://api.napster.com/zttp://direct.rhapsody.com/Z0NTEwNDI1OGUtY2IyMi00MGNmLWIxMjQtYzI2MjVkYWM0ODJh)requests�Session�s�headers�update�bases�key)�self�r
+                                                      �./storage/emulated/0/MQ-DL-Reborn/api/client.py__init__s
+�
+zClient.__init__Nrc     Cs\|r|jj�|�|jj||j||||d�}|��|rT|��D]|jj=qD|��S)N)�params�datarr�requestr    �raise_for_status�keys�json)       r
+                 �methodZepointrrr�i�r�kr
+                                         r
+�       make_calls                        r
+
+                 zClient.make_callcCs4||dd�}ddi}|jdd||d�}|_dS)     Npassword)usernamerZ
+Authorizationz�Basic TlRFd05ESTFPR1V0WTJJeU1pMDBNR05tTFdJeE1qUXRZekkyTWpWa1lXTTBPREpoOk56YzNPRE0yWWpVdE1XWTVNQzAwWWpVMkxXSm1PRGN0TXpZd01UYzNOR0U1WkdFMQ==�POSTz
+                                         oauth/token)rrZ
+                                                        access_token)r�token)r
+                   �email�pwdrr�jr
+                                  r
+�auth��z                           r
+        Client.authcCs&||dd�}|jdd|dd�}|dSNZ5C8F8G9G8B4D0E5JalbumShortcutZartistShortcutZ
+                             developerKey�GETz(metadata/data/methods/getIdByShortcut.js�)rr�id)r)r
+                                       �alb_artZ        alb_shcutrr!r
+          r
+�          r
+resolve_id+s�zClient.resolve_idcCs8d|dd�}d|ji}|jdd|d||�}|dS)
+N�JP_MORAQUALITAS���catalog�lang�rights�apikeyr#�
+                                                 v2.2/albums/�/tracks�rr�tracks�r
+r�r
+   �alb_idr,rrr!r
+                 r
+�get_tracks_meta6s���zClient.get_tracks_metacCs4d|dd�}d|ji}|jdd|||d�}|S)   Nr(r)r*r.r#z
+                            v2.2/tracks/r1r2r3)r
+                                                �tra_idr,rrr!r
+   r
+�get_track_metaDs��
+                   �zClient.get_track_metacCs6d|ddd�}d|ji}|jdd|||�}|d      S)
+Nr(r)���r+r,r-�limitr.r#�v2.2/playlists/r1Z     playlistsr3�r
+  �pp_idr,rrr!r
+               r
+�get_playlist_metaRs��
+                      �zClient.get_playlist_metacCs:d|ddd�}d|ji}|jdd|||d   �}|d
+S)
+  Nr(r)r9r:r.r#r<r0r1r2r3r=r
+                            r
+�get_playlist_tracksas���zClient.get_playlist_trackscCs8d|dd�}d|ji}|jdd|||d�}|d    S)
+Nr(r)r*r.r#r/r1Zalbumsrr3r4r
+                            r
+�get_album_metaps��          r
+                   �zClient.get_album_metacCsd�|jd||�}|S)Nz/{0}imageserver/v2/albums/{1}/images/{2}x{2}.jpgr)�formatr)r
+ r5ZdimZalb_covr
+                r
+�       get_cover~s
+                  �zClient.get_covercCs<|||d�}dd|ji}|jdd||d�}|dd   S)
+N)�bitraterB�trackrzBearer r#z
+                              v2.2/streamsr1Zstreamsr�url)rr)r
+   �brate�fmtr7rrr!r
+                    r
+�get_track_stream�s� r
+�zClient.get_track_stream)NNNr)__name__�
+__module__�
+           __qualname__rrr"r'r6r8r?r@rArCrIr
+                                            r
+                                             r
+rs                                            r
+
+
+
+r)rrr
+     r
+      r
