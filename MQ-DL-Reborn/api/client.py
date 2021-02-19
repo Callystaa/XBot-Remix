@@ -11,13 +11,27 @@ class Client():
                           "/75.0.3770.100 Safari/537.36",
             'Referer': 'http://localhost:19330/'
         })
-        self.bases = ["https://api.napster.com/", "http://direct.rhapsody.com/"]
+        self.bases = [
+            "https://api.napster.com/",
+            "http://direct.rhapsody.com/"]
         self.key = "NTEwNDI1OGUtY2IyMi00MGNmLWIxMjQtYzI2MjVkYWM0ODJh"
 
-    def make_call(self, method, epoint, data=None, params=None, headers=None, i=0):
+    def make_call(
+            self,
+            method,
+            epoint,
+            data=None,
+            params=None,
+            headers=None,
+            i=0):
         if headers:
             self.s.headers.update(headers)
-        r = self.s.request(method, self.bases[i] + epoint, params=params, data=data)
+        r = self.s.request(
+            method,
+            self.bases[i] +
+            epoint,
+            params=params,
+            data=data)
         r.raise_for_status()
         if headers:
             for k in headers.keys():
@@ -32,9 +46,8 @@ class Client():
         }
         headers = {
             "Authorization": "Basic TlRFd05ESTFPR1V0WTJJeU1pMDBNR05tTFdJeE1qUXRZekkyT"
-                             "WpWa1lXTTBPREpoOk56YzNPRE0yWWpVdE1XWTVNQzAwWWpVMkxXSm1P"
-                             "RGN0TXpZd01UYzNOR0U1WkdFMQ=="
-        }
+            "WpWa1lXTTBPREpoOk56YzNPRE0yWWpVdE1XWTVNQzAwWWpVMkxXSm1P"
+            "RGN0TXpZd01UYzNOR0U1WkdFMQ=="}
         j = self.make_call(
             "POST", "oauth/token", data=data, headers=headers
         )
@@ -47,8 +60,10 @@ class Client():
             "developerKey": "5C8F8G9G8B4D0E5J"
         }
         j = self.make_call(
-            "GET", "metadata/data/methods/getIdByShortcut.js", params=params, i=1
-        )
+            "GET",
+            "metadata/data/methods/getIdByShortcut.js",
+            params=params,
+            i=1)
         return j['id']
 
     def get_tracks_meta(self, alb_id, lang):
@@ -61,8 +76,12 @@ class Client():
             "apikey": self.key
         }
         j = self.make_call(
-            "GET", "v2.2/albums/" + alb_id + "/tracks", params=params, headers=headers
-        )
+            "GET",
+            "v2.2/albums/" +
+            alb_id +
+            "/tracks",
+            params=params,
+            headers=headers)
         return j['tracks']
 
     def get_track_meta(self, tra_id, lang):
@@ -105,8 +124,12 @@ class Client():
             "apikey": self.key
         }
         j = self.make_call(
-            "GET", "v2.2/playlists/" + pp_id + "/tracks", params=params, headers=headers
-        )
+            "GET",
+            "v2.2/playlists/" +
+            pp_id +
+            "/tracks",
+            params=params,
+            headers=headers)
         return j['tracks']
 
     def get_album_meta(self, alb_id, lang):

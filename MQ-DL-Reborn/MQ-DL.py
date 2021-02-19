@@ -11,7 +11,6 @@ import platform
 # 3rd
 import requests
 from tqdm import tqdm
-from mutagen import File
 from mutagen import id3
 from mutagen.mp4 import MP4, MP4Cover
 from mutagen.flac import FLAC, Picture
@@ -38,11 +37,11 @@ def title():
     else:
         sys.stdout.write("\x1b]2;MQ-DL R2 (by Sorrow446)\x07")
     print("""
- _____ _____     ____  __    
-|     |     |___|    \|  |   
-| | | |  |  |___|  |  |  |__ 
+ _____ _____     ____  __
+|     |     |___|    \\|  |
+| | | |  |  |___|  |  |  |__
 |_|_|_|__  _|   |____/|_____|
-         |__|                
+         |__|
    """)
 
 
@@ -103,7 +102,7 @@ def parse_prefs():
         '-o', '--output-dir',
         default=cfg['output_dir'],
         help='Abs output directory. Double up backslashes or use single '
-             'forward slashes for Windows. Default: \MQ-DL downloads'
+             'forward slashes for Windows. Default: \\MQ-DL downloads'
     )
     parser.add_argument(
         '-l', '--meta-lang',
@@ -313,7 +312,10 @@ def write_tags(pre_abs, meta, fmt, cov_abs):
         audio['cprt'] = meta['copyright']
         if cov_abs:
             with open(cov_abs, "rb") as f:
-                audio['covr'] = [MP4Cover(f.read(), imageformat=MP4Cover.FORMAT_JPEG)]
+                audio['covr'] = [
+                    MP4Cover(
+                        f.read(),
+                        imageformat=MP4Cover.FORMAT_JPEG)]
     audio.save(pre_abs)
 
 
@@ -332,10 +334,12 @@ def download_cov(alb_id, cov_abs):
 
 def download_tra(tra_id):
     tra_src_meta = client.get_track_meta(tra_id, cfg['meta_lang'])[0]
-    alb_src_meta = client.get_album_meta(tra_src_meta['albumId'], cfg['meta_lang'])
+    alb_src_meta = client.get_album_meta(
+        tra_src_meta['albumId'], cfg['meta_lang'])
     total = 1
     alb_meta = parse_meta(alb_src_meta, total=total)
-    alb_fol = "{} - {}".format(tra_src_meta['artistName'], tra_src_meta['name'])
+    alb_fol = "{} - {}".format(tra_src_meta['artistName'],
+                               tra_src_meta['name'])
     alb_abs = os.path.join(cfg['output_dir'], sanitize(alb_fol))
     cov_abs = os.path.join(alb_abs, "cover.jpg")
     dir_setup(alb_abs)
@@ -343,10 +347,16 @@ def download_tra(tra_id):
     if not tra_src_meta['isStreamable']:
         print("Track isn't allowed to be streamed.")
         return
-    specs = query_quals(tra_src_meta['formats'] + tra_src_meta['losslessFormats'])
+    specs = query_quals(
+        tra_src_meta['formats'] +
+        tra_src_meta['losslessFormats'])
     meta = parse_meta(tra_src_meta, meta=alb_meta, num=1)
     pre_abs = os.path.join(alb_abs, str(1) + ".mq-dl")
-    post_abs = os.path.join(alb_abs, sanitize(parse_template(meta)) + specs['ext'])
+    post_abs = os.path.join(
+        alb_abs,
+        sanitize(
+            parse_template(meta)) +
+        specs['ext'])
     if os.path.isfile(post_abs):
         print("Track already exists locally.")
         return
@@ -384,13 +394,15 @@ def download_pp(pp_id):
             print("Track isn't allowed to be streamed.")
             continue
 
-        alb_src_meta = client.get_album_meta(track['albumId'], cfg['meta_lang'])
+        alb_src_meta = client.get_album_meta(
+            track['albumId'], cfg['meta_lang'])
         alb_meta = parse_meta(alb_src_meta, total=total)
 
         specs = query_quals(track['formats'] + track['losslessFormats'])
         meta = parse_meta(track, meta=alb_meta, num=num)
         pre_abs = os.path.join(pp_abs, str(num) + ".mq-dl")
-        post_abs = os.path.join(pp_abs, sanitize(parse_template(meta)) + specs['ext'])
+        post_abs = os.path.join(pp_abs, sanitize(
+            parse_template(meta)) + specs['ext'])
         if os.path.isfile(post_abs):
             print("Track already exists locally.")
             continue
@@ -431,7 +443,9 @@ def download_alb(alb_id):
         specs = query_quals(track['formats'] + track['losslessFormats'])
         meta = parse_meta(track, meta=alb_meta, num=num)
         pre_abs = os.path.join(alb_abs, str(num) + ".mq-dl")
-        post_abs = os.path.join(alb_abs, sanitize(parse_template(meta)) + specs['ext'])
+        post_abs = os.path.join(
+            alb_abs, sanitize(
+                parse_template(meta)) + specs['ext'])
         if os.path.isfile(post_abs):
             print("Track already exists locally.")
             continue
