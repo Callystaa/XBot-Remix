@@ -97,7 +97,7 @@ UPSTREAM_REPO_URL = (os.environ.get("UPSTREAM_REPO_URL")
                      or "https://github.com/X-Newbie/XBot-Remix")
 
 # UPSTREAM_REPO_URL branch, the default is alpha
-UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH") or "alpha"
+UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH") or "Beta🔥"
 
 # Console verbose logging
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get(
