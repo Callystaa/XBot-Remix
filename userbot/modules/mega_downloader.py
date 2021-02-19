@@ -1,3 +1,23 @@
+# Copyright (C) 2020 Adek Maulana.
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+#  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 import asyncio
 import errno
 import json
@@ -74,9 +94,7 @@ async def mega_downloader(megadl):
     file_path = TEMP_DOWNLOAD_DIRECTORY + file_name
     if os.path.isfile(file_path):
         try:
-            raise FileExistsError(
-                errno.EEXIST, os.strerror(
-                    errno.EEXIST), file_path)
+            raise FileExistsError(errno.EEXIST, os.strerror(errno.EEXIST), file_path)
         except FileExistsError as e:
             await megadl.edit(f"`{str(e)}`")
             return None
@@ -109,11 +127,11 @@ async def mega_downloader(megadl):
                 f"`Size:` {humanbytes(downloaded)} of {humanbytes(total_length)}\n"
                 f"`Speed:` {speed}\n"
                 f"`ETA:` {time_formatter(estimated_total_time)}\n"
-                f"`Duration:` {time_formatter(round(diff))}")
-            if round(
-                    diff %
-                    15.00) == 0 and (
-                    display_message != current_message or total_length == downloaded):
+                f"`Duration:` {time_formatter(round(diff))}"
+            )
+            if round(diff % 15.00) == 0 and (
+                display_message != current_message or total_length == downloaded
+            ):
                 await megadl.edit(current_message)
                 await asyncio.sleep(0.2)
                 display_message = current_message
@@ -160,9 +178,7 @@ async def decrypt_file(megadl, file_path, temp_file_path, hex_key, hex_raw_key):
     if await subprocess_run(megadl, cmd):
         os.remove(temp_file_path)
     else:
-        raise FileNotFoundError(
-            errno.ENOENT, os.strerror(
-                errno.ENOENT), file_path)
+        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_path)
     return
 
 

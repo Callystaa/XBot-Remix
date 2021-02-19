@@ -4,6 +4,7 @@ import os.path
 import time
 from os.path import exists, isdir
 
+from userbot import CMD_HELP
 from userbot.events import register
 from userbot.utils import humanbytes
 
@@ -107,3 +108,8 @@ async def lst(event):
             await event.delete()
     else:
         await event.edit(msg)
+
+
+CMD_HELP.update(
+    {"file": ">`.ls` <directory>" "\nUsage: Get list file inside directory.\n"}
+)

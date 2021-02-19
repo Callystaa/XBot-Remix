@@ -16,7 +16,7 @@ from requests import get
 
 from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from userbot.events import register
-from userbot.utils.tools import human_to_bytes, humanbytes, md5, time_formatter
+from userbot.utils import chrome, human_to_bytes, humanbytes, md5, time_formatter
 
 GITHUB = "https://github.com"
 
@@ -26,14 +26,30 @@ async def magisk(request):
     magisk_dict = {
         "Stable": "https://raw.githubusercontent.com/topjohnwu/magisk_files/master/stable.json",
         "Beta": "https://raw.githubusercontent.com/topjohnwu/magisk_files/master/beta.json",
+        "Canary": "https://raw.githubusercontent.com/topjohnwu/magisk_files/canary/canary.json",
     }
     releases = "Latest Magisk Releases:\n"
     for name, release_url in magisk_dict.items():
         data = get(release_url).json()
+        if str(name) == "Canary":
+            data["magisk"]["link"] = (
+                "https://github.com/topjohnwu/magisk_files/raw/canary/"
+                + data["magisk"]["link"]
+            )
+            data["app"]["link"] = (
+                "https://github.com/topjohnwu/magisk_files/raw/canary/"
+                + data["app"]["link"]
+            )
+            data["uninstaller"]["link"] = (
+                "https://github.com/topjohnwu/magisk_files/raw/canary/"
+                + data["uninstaller"]["link"]
+            )
+
         releases += (
             f'{name}: [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | '
             f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | '
-            f'[Uninstaller]({data["uninstaller"]["link"]})\n')
+            f'[Uninstaller]({data["uninstaller"]["link"]})\n'
+        )
     await request.edit(releases)
 
 
@@ -89,8 +105,7 @@ async def codename_info(request):
             "certified-android-devices/master/by_brand.json"
         ).text
     )
-    devices_lower = {k.lower(): v for k, v in data.items()
-                     }  # Lower brand names in JSON
+    devices_lower = {k.lower(): v for k, v in data.items()}  # Lower brand names in JSON
     devices = devices_lower.get(brand)
     results = [
         i
@@ -227,11 +242,11 @@ async def devices_specifications(request):
         return
     all_brands = (
         BeautifulSoup(
-            get("https://www.devicespecifications.com/en/brand-more").content,
-            "lxml") .find(
-            "div",
-            {
-                "class": "brand-listing-container-news"}) .findAll("a"))
+            get("https://www.devicespecifications.com/en/brand-more").content, "lxml"
+        )
+        .find("div", {"class": "brand-listing-container-news"})
+        .findAll("a")
+    )
     brand_page_url = None
     try:
         brand_page_url = [
